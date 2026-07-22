@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}송금{% endblock %}
+
+{% block content %}
+<h2>송금</h2>
+
+<p>
+  <strong>현재 잔액:</strong>
+  {{ "{:,}".format(user['balance']) }}원
+</p>
+
+<form method="post" action="{{ url_for('transfer') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <input
+    type="hidden"
+    name="idempotency_key"
+    value="{{ idempotency_key }}"
+  >
+
+  <label for="receiver_id">받는 사람</label>
+  <select id="receiver_id" name="receiver_id" required>
+    <option value="">받는 사람을 선택하세요</option>
+
+    {% for target_user in users %}
+      <option value="{{ target_user['id'] }}">
+        {{ target_user['username'] }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <br><br>
+
+  <label for="amount">송금액</label>
+  <input
+    type="number"
+    id="amount"
+    name="amount"
+    min="1"
+    max="100000000"
+    step="1"
+    required
+  >
+
+  <button type="submit">송금하기</button>
+</form>
+{% endblock %}

@@ -1,11 +1,66 @@
 {% extends "base.html" %}
+
 {% block title %}프로필{% endblock %}
+
 {% block content %}
-<h2>프로필 관리</h2>
-<p>사용자명: {{ user.username }}</p>
-<form method="post">
-  소개글: <br>
-  <textarea name="bio" rows="4" cols="50">{{ user.bio or '' }}</textarea><br>
-  <button type="submit">프로필 업데이트</button>
+<h2>프로필</h2>
+
+<p><strong>사용자명:</strong> {{ user['username'] }}</p>
+
+<h3>소개 수정</h3>
+
+<form method="post" action="{{ url_for('profile') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="action" value="update_bio">
+
+  <label for="bio">소개</label>
+  <textarea
+    id="bio"
+    name="bio"
+    maxlength="500"
+    rows="5"
+  >{{ user['bio'] }}</textarea>
+
+  <button type="submit">소개 저장</button>
+</form>
+
+<hr>
+
+<h3>비밀번호 변경</h3>
+
+<form method="post" action="{{ url_for('profile') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="action" value="change_password">
+
+  <label for="current_password">현재 비밀번호</label>
+  <input
+    type="password"
+    id="current_password"
+    name="current_password"
+    autocomplete="current-password"
+    required
+  >
+
+  <label for="new_password">새 비밀번호</label>
+  <input
+    type="password"
+    id="new_password"
+    name="new_password"
+    autocomplete="new-password"
+    minlength="10"
+    required
+  >
+
+  <label for="confirm_password">새 비밀번호 확인</label>
+  <input
+    type="password"
+    id="confirm_password"
+    name="confirm_password"
+    autocomplete="new-password"
+    minlength="10"
+    required
+  >
+
+  <button type="submit">비밀번호 변경</button>
 </form>
 {% endblock %}

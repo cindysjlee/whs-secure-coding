@@ -1,8 +1,44 @@
 {% extends "base.html" %}
+
 {% block title %}상품 상세보기{% endblock %}
+
 {% block content %}
-<h2>{{ product.title }}</h2>
-<p>{{ product.description }}</p>
-<p>가격: {{ product.price }}</p>
-<p>판매자: {{ seller.username if seller else '알 수 없음' }}</p>
+
+{% if product['image_filename'] %}
+  <img
+    src="{{ url_for('product_image', filename=product['image_filename']) }}"
+    alt="상품 이미지"
+    class="product-image"
+  >
+{% endif %}
+
+<h2>{{ product['title'] }}</h2>
+
+<p>{{ product['description'] }}</p>
+<p><strong>가격:</strong> {{ product['price'] }}원</p>
+<p>
+  <strong>판매자:</strong>
+  {{ seller['username'] if seller else '알 수 없음' }}
+</p>
+
+{% if session.get('user_id') == product['seller_id'] %}
+  <hr>
+
+  <a href="{{ url_for('edit_product', product_id=product['id']) }}">
+    상품 수정
+  </a>
+
+  <form
+    method="post"
+    action="{{ url_for('delete_product', product_id=product['id']) }}"
+    class="product-actions"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit">상품 삭제</button>
+  </form>
+{% endif %}
+
+<p>
+  <a href="{{ url_for('dashboard') }}">목록으로 돌아가기</a>
+</p>
 {% endblock %}
