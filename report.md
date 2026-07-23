@@ -5,6 +5,9 @@
 **개발 환경:** Python 3.14 / Flask 3.1 / SQLite  
 **작성일:** 2026.07.23
 
+**GitHub Repository:**  
+https://github.com/cindysjlee/whs-secure-coding
+
 ---
 
 # 1. 프로젝트 개요
